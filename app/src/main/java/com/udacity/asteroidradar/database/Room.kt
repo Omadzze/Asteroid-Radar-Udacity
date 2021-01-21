@@ -12,7 +12,7 @@ interface AsteroidDao {
     @Query("SELECT * FROM databaseasteroid WHERE close_approach_date BETWEEN :startDate AND :endDate")
     fun getWeeklyAsteroids(startDate: String, endDate: String): LiveData<List<DatabaseAsteroid>>
 
-    @Query("SELECT * FROM databaseasteroid ORDER BY close_approach_date DESC")
+    @Query("SELECT * FROM databaseasteroid")
     fun getAsteroids(): LiveData<List<DatabaseAsteroid>>
 
     @Query("SELECT * FROM picture_of_day")

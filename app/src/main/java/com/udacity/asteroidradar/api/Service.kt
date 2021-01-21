@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.api
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.Constants
 import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
@@ -13,7 +14,8 @@ import retrofit2.http.GET
 
 interface NasaService {
     @GET("neo/rest/v1/feed?&api_key=${Constants.API_KEY}")
-    fun getAsteroidList(): Deferred<NetworkAsteroidContainer>
+//    fun getAsteroidList(): Deferred<NetworkAsteroidContainer>
+   suspend fun getAsteroidList(): String
 }
 
 private val moshi = Moshi.Builder()
@@ -28,5 +30,5 @@ object Network {
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .build()
 
-    val asteroids = retrofit.create(NasaService::class.java)
+    val retrofitService: NasaService by lazy { retrofit.create(NasaService::class.java) }
 }
