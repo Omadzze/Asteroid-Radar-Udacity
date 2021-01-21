@@ -23,14 +23,6 @@ class MainFragment : Fragment() {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
 
-//    private val viewModel: MainViewModel by lazy {
-//        val activivty = requireNotNull(this.activity) {
-//            "You can only access the viewModel after onViewCreated()"
-//        }
-//
-//        ViewModelProvider(this, MainViewModel.Factory(activivty.application).get(MainViewModel::class.java))
-//    }
-
     private var viewModelAdapter: AsteroidAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,9 +44,6 @@ class MainFragment : Fragment() {
         viewModelAdapter = AsteroidAdapter(AsteroidClick {
             viewModel.displayPropertyDetails(it)
         })
-//        binding.asteroidRecycler.adapter = AsteroidAdapter(AsteroidClick {
-//            viewModel.displayPropertyDetails(it)
-//        })
 
         viewModel.navigateToSelectedProperty.observe(this, Observer {
             if (null != it) {

@@ -44,7 +44,4 @@ data class DatabasePictureOfDay constructor(
     @PrimaryKey
     val url: String,
     @ColumnInfo(name = "title")
-    var title: String,
-    @ColumnInfo(name = "media_type")
-    var mediaType: String
-)
+    val title: String)

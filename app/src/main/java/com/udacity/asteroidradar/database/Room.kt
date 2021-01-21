@@ -26,7 +26,7 @@ interface AsteroidDao {
 
 }
 
-@Database(entities = [DatabaseAsteroid::class, DatabasePictureOfDay::class], version = 1)
+@Database(entities = [DatabaseAsteroid::class, DatabasePictureOfDay::class], version = 2)
 abstract class AsteroidDatabase: RoomDatabase() {
     abstract val asteroidDao: AsteroidDao
 }
@@ -37,7 +37,8 @@ fun getDatabase(context: Context): AsteroidDatabase {
     synchronized(AsteroidDatabase::class.java) {
         if (!::INSTANCE.isInitialized) {
             INSTANCE = Room.databaseBuilder(context.applicationContext,
-                AsteroidDatabase::class.java, "asteroid_database").build()
+                AsteroidDatabase::class.java, "asteroid_database").fallbackToDestructiveMigration()
+                .build()
         }
         return INSTANCE
     }
