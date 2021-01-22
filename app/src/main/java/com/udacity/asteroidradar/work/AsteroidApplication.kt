@@ -2,6 +2,7 @@ package com.udacity.asteroidradar.work
 
 import android.app.Application
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.work.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,10 +14,12 @@ class AsteroidApplication: Application() {
 
     val applicationScope = CoroutineScope(Dispatchers.Default)
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun delayedInit() = applicationScope.launch {
         setupRecurringWork()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setupRecurringWork() {
         val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
                 .build()
@@ -26,6 +29,7 @@ class AsteroidApplication: Application() {
                 repeatingRequest)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.UNMETERED)
             .setRequiresBatteryNotLow(true)
@@ -40,6 +44,7 @@ class AsteroidApplication: Application() {
             .setConstraints(constraints)
             .build()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())

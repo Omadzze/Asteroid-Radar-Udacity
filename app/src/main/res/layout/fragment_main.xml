@@ -32,9 +32,9 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
+                android:contentDescription="@{viewModel.imageOfDay.url}"
                 app:imageDayUrl="@{viewModel.imageOfDay.title}"
-                app:srcCompat="@drawable/placeholder_picture_of_day"/>
-<!--            app:bindDayImage="@{viewModel.imageOfDay.url}"-->
+                app:srcCompat="@drawable/placeholder_picture_of_day" />
 
             <TextView
                 android:id="@+id/textView"
@@ -48,7 +48,6 @@
                 android:text="@{viewModel.imageOfDay.url}"
                 android:background="#55010613"
                 tools:text="@string/image_of_the_day"/>
-<!--            android:text="@{viewModel.imageOfDay.title}"-->
         </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView

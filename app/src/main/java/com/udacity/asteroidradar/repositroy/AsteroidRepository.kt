@@ -18,6 +18,7 @@ import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.database.DatabaseAsteroid
 import com.udacity.asteroidradar.database.DatabasePictureOfDay
 import com.udacity.asteroidradar.database.asDomainModel
+import com.udacity.asteroidradar.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -27,11 +28,27 @@ import java.time.LocalDate
 
 class AsteroidRepository(private val database: AsteroidDatabase) {
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private val _startDate = LocalDate.now()
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private val _endDate = _startDate.plusDays(7)
+
 
     var asteroids: LiveData<List<Asteroid>> =
-        Transformations.map(database.asteroidDao.getAsteroids()) {
-            it.asDomainModel()
-        }
+            Transformations.map(database.asteroidDao.getAsteroids()) {
+                it.asDomainModel()
+            }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    val todayAsteroids: LiveData<List<Asteroid>> = Transformations.map(database.asteroidDao.getTodayAsteroids(_startDate.toString())) {
+        it.asDomainModel()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    val weeklyAsteroids: LiveData<List<Asteroid>> = Transformations.map(database.asteroidDao.getWeeklyAsteroids(_startDate.toString(), _endDate.toString())) {
+        it.asDomainModel()
+    }
 
     suspend fun refreshAsteroids() {
         withContext(Dispatchers.IO) {
@@ -43,18 +60,17 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
 
                 for (asteroid in asteroids) {
                     val databaseAsteroid = DatabaseAsteroid(
-                        asteroid.id,
-                        asteroid.codename,
-                        asteroid.closeApproachDate,
-                        asteroid.absoluteMagnitude,
-                        asteroid.estimatedDiameter,
-                        asteroid.relativeVelocity,
-                        asteroid.distanceFromEarth,
-                        asteroid.isPotentiallyHazardous
+                            asteroid.id,
+                            asteroid.codename,
+                            asteroid.closeApproachDate,
+                            asteroid.absoluteMagnitude,
+                            asteroid.estimatedDiameter,
+                            asteroid.relativeVelocity,
+                            asteroid.distanceFromEarth,
+                            asteroid.isPotentiallyHazardous
                     )
 
                     listDbAsteroids.add(databaseAsteroid)
-                    Log.i("TAG", databaseAsteroid.toString())
                 }
                 database.asteroidDao.insertAll(listDbAsteroids.toList())
             } catch (e: Exception) {
@@ -69,7 +85,6 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
             val pictureOfDay = Network.retrofitService.getImageOfTheDay(LocalDate.now())
             val dbPictureOfDay = DatabasePictureOfDay(pictureOfDay.title, pictureOfDay.url)
             database.asteroidDao.insertPictureOfTheDay(dbPictureOfDay)
-            Log.i("SAG", dbPictureOfDay.toString())
         }
     }
 

@@ -1,8 +1,10 @@
 package com.udacity.asteroidradar.main
 
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.annotation.LayoutRes
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -34,6 +36,7 @@ class MainFragment : Fragment() {
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val binding = FragmentMainBinding.inflate(inflater)
@@ -45,7 +48,7 @@ class MainFragment : Fragment() {
             viewModel.displayPropertyDetails(it)
         })
 
-        viewModel.navigateToSelectedProperty.observe(this, Observer {
+        viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
             if (null != it) {
                 this.findNavController().navigate(MainFragmentDirections.actionShowDetail(it))
                 viewModel.displayPropertyDetailsComplete()
@@ -67,7 +70,13 @@ class MainFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.show_all_menu -> viewModel.setAsteroidFilter(MainViewModel.AsteroidFilter.WEEKLY)
+            R.id.show_rent_menu -> viewModel.setAsteroidFilter(MainViewModel.AsteroidFilter.TODAY)
+            else -> viewModel.setAsteroidFilter(MainViewModel.AsteroidFilter.ALL)
+        }
         return true
     }
 }

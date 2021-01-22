@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.udacity.asteroidradar.database.getDatabase
+import com.udacity.asteroidradar.main.MainViewModel
 import com.udacity.asteroidradar.repositroy.AsteroidRepository
 import retrofit2.HttpException
 
