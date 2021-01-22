@@ -29,9 +29,9 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.asteroidList.observe(viewLifecycleOwner, Observer<List<Asteroid>> { asteroids ->
-            asteroids?.apply {
-                viewModelAdapter?.asteroids = asteroids
+        viewModel.asteroids.observe(viewLifecycleOwner, Observer<List<Asteroid>> { asteroid ->
+            asteroid?.apply {
+                viewModelAdapter?.asteroids = asteroid
             }
         })
     }

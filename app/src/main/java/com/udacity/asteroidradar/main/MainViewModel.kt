@@ -42,11 +42,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+
     init {
         viewModelScope.launch {
             refreshAsteroidsFromNetwork(AsteroidFilter.ALL)
             refreshPictureFromNetwork()
-//            _imageOfDay.value = asteroidRepository.getAsteroidImageOfTheDay()
         }
     }
 
@@ -54,6 +54,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             try {
                 asteroidRepository.refreshAsteroids()
+//                asteroidRepository.todayAsteroids
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -81,6 +82,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     val asteroidList = asteroidRepository.asteroids
+    val asteroidToday = asteroidRepository.todayAsteroids
 
     /**
      * Factory for constructing DevByteViewModel with parameter
